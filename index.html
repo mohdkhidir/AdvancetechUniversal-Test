@@ -3,27 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MediCore Pro — Advanced Hospital Equipment</title>
+  <title>MediCore Pro — Hospital Medical Equipment</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          fontFamily: {
+            heading: ['Figtree', 'sans-serif'],
+            body: ['Noto Sans', 'sans-serif'],
+          },
           colors: {
-            medical: {
-              50:  '#eff6ff',
-              100: '#dbeafe',
-              200: '#bfdbfe',
-              400: '#60a5fa',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              800: '#1e40af',
-              900: '#1e3a8a',
+            teal: {
+              50:  '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              300: '#5eead4',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            cyan: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+              700: '#0e7490',
+            },
+            health: {
+              green: '#22c55e',
+              'green-dark': '#16a34a',
             }
           }
         }
@@ -31,663 +45,832 @@
     }
   </script>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      color: #134e4a;
+      background: #f0fdfa;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Figtree', sans-serif; }
+
     @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
-    .gradient-hero {
-      background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 40%, #2563eb 70%, #3b82f6 100%);
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      background: #0891b2;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0 0 0.5rem 0.5rem;
+      font-weight: 600;
+      z-index: 9999;
+      transition: top 0.2s ease;
     }
-    .card-hover {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    .skip-link:focus { top: 0; }
+
+    /* Focus rings — 3px solid, offset */
+    :focus-visible {
+      outline: 3px solid #0891b2;
+      outline-offset: 3px;
+      border-radius: 4px;
     }
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(37,99,235,0.12);
+
+    /* Hero gradient */
+    .hero-bg {
+      background: linear-gradient(160deg, #134e4a 0%, #0f766e 35%, #0891b2 80%, #22d3ee 100%);
     }
-    .fade-in {
+
+    /* Section fade */
+    .reveal {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
     }
-    .fade-in.visible {
+    .reveal.visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
-    .pulse-ring {
-      animation: pulse-ring 2s cubic-bezier(0.215,0.61,0.355,1) infinite;
+
+    /* Stat counter highlight */
+    .stat-num { font-family: 'Figtree', sans-serif; font-feature-settings: "tnum"; }
+
+    /* Card lift */
+    .lift {
+      transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
     }
-    @keyframes pulse-ring {
-      0%   { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
-      70%  { box-shadow: 0 0 0 12px rgba(37,99,235,0); }
-      100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+    .lift:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(14, 116, 144, 0.14);
+    }
+
+    /* CTA glow */
+    .btn-primary:hover { box-shadow: 0 0 0 4px rgba(34,197,94,0.25); }
+    .btn-secondary:hover { box-shadow: 0 0 0 4px rgba(255,255,255,0.25); }
+
+    /* Trust badge */
+    .badge { display: inline-flex; align-items: center; gap: 0.375rem; }
+
+    /* Testimonial quote mark */
+    .quote-mark::before {
+      content: '"';
+      font-family: 'Figtree', sans-serif;
+      font-size: 4rem;
+      line-height: 1;
+      color: #ccfbf1;
+      float: left;
+      margin-right: 0.25rem;
+      margin-top: -0.5rem;
     }
   </style>
 </head>
-<body class="font-sans text-slate-800 bg-white antialiased">
+<body>
 
-  <!-- ─── NAVBAR ─────────────────────────────────────────────── -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur border-b border-slate-100 shadow-sm" role="navigation" aria-label="Main navigation">
+  <!-- Skip to content (accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ══════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════ -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-teal-100 shadow-sm" role="banner">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 bg-medical-600 rounded-lg flex items-center justify-center" aria-hidden="true">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+      <nav class="flex items-center justify-between h-16" aria-label="Primary navigation">
+
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2.5 focus-visible:rounded-lg" aria-label="MediCore Pro home">
+          <div class="w-9 h-9 bg-cyan-600 rounded-lg flex items-center justify-center flex-shrink-0" aria-hidden="true">
+            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
             </svg>
           </div>
-          <span class="font-bold text-xl text-medical-800">MediCore<span class="text-medical-500">Pro</span></span>
-        </div>
-        <div class="hidden md:flex items-center gap-8">
-          <a href="#features"     class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Features</a>
-          <a href="#how-it-works" class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">How It Works</a>
-          <a href="#testimonials"  class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Testimonials</a>
-          <a href="#contact"       class="text-sm font-medium text-slate-600 hover:text-medical-600 transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Contact</a>
-        </div>
+          <span class="font-heading font-bold text-xl text-teal-900">Medi<span class="text-cyan-600">Core</span> Pro</span>
+        </a>
+
+        <!-- Desktop links -->
+        <ul class="hidden md:flex items-center gap-1" role="list">
+          <li><a href="#solutions" class="px-3 py-2 text-sm font-medium text-teal-700 hover:text-cyan-700 hover:bg-teal-50 rounded-lg transition-colors duration-200">Solutions</a></li>
+          <li><a href="#how-it-works" class="px-3 py-2 text-sm font-medium text-teal-700 hover:text-cyan-700 hover:bg-teal-50 rounded-lg transition-colors duration-200">How It Works</a></li>
+          <li><a href="#testimonials" class="px-3 py-2 text-sm font-medium text-teal-700 hover:text-cyan-700 hover:bg-teal-50 rounded-lg transition-colors duration-200">Testimonials</a></li>
+          <li><a href="#contact" class="px-3 py-2 text-sm font-medium text-teal-700 hover:text-cyan-700 hover:bg-teal-50 rounded-lg transition-colors duration-200">Contact</a></li>
+        </ul>
+
+        <!-- CTAs -->
         <div class="flex items-center gap-3">
-          <a href="#contact" class="hidden sm:inline-flex text-sm font-medium text-medical-600 hover:text-medical-700 transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded px-2 py-1">
-            Request Demo
+          <a href="#contact" class="hidden sm:inline-block text-sm font-semibold text-cyan-700 hover:text-cyan-900 hover:underline underline-offset-2 transition-colors">
+            Book Demo
           </a>
           <a href="#contact"
-            class="inline-flex items-center gap-2 bg-medical-600 hover:bg-medical-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2 pulse-ring">
+            class="btn-primary inline-flex items-center gap-1.5 bg-health-green hover:bg-health-green-dark text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors duration-200 cursor-pointer min-h-[44px]">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
             Get a Quote
           </a>
         </div>
-      </div>
-    </div>
-  </nav>
 
-  <!-- ─── HERO ──────────────────────────────────────────────── -->
-  <section class="gradient-hero pt-24 pb-20 lg:pt-32 lg:pb-28 overflow-hidden relative" aria-labelledby="hero-heading">
-    <div class="absolute inset-0 opacity-10" aria-hidden="true">
-      <div class="absolute top-20 right-20 w-72 h-72 bg-white rounded-full blur-3xl"></div>
-      <div class="absolute bottom-10 left-10 w-96 h-96 bg-blue-300 rounded-full blur-3xl"></div>
+      </nav>
     </div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-blue-100 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
-            <span class="w-2 h-2 bg-green-400 rounded-full" aria-hidden="true"></span>
-            FDA Cleared · CE Marked · ISO 13485
+  </header>
+
+  <!-- ══════════════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════════════ -->
+  <main id="main-content">
+
+    <!-- ── HERO ──────────────────────────────────────── -->
+    <section class="hero-bg pt-28 pb-20 lg:pt-36 lg:pb-28 relative overflow-hidden" aria-labelledby="hero-h1">
+
+      <!-- decorative circles -->
+      <div aria-hidden="true" class="absolute inset-0 pointer-events-none">
+        <div class="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-white opacity-[0.04]"></div>
+        <div class="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-teal-300 opacity-[0.07] blur-2xl"></div>
+      </div>
+
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+
+          <!-- Left: copy -->
+          <div>
+            <!-- Regulatory badges -->
+            <div class="flex flex-wrap gap-2 mb-6" aria-label="Regulatory certifications">
+              <span class="badge bg-white/10 border border-white/20 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full">
+                <svg class="w-3.5 h-3.5 text-health-green" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                FDA 510(k) Cleared
+              </span>
+              <span class="badge bg-white/10 border border-white/20 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full">
+                <svg class="w-3.5 h-3.5 text-health-green" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                CE Class IIa
+              </span>
+              <span class="badge bg-white/10 border border-white/20 text-teal-100 text-xs font-semibold px-3 py-1 rounded-full">
+                <svg class="w-3.5 h-3.5 text-health-green" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                ISO 13485:2016
+              </span>
+            </div>
+
+            <h1 id="hero-h1" class="font-heading text-4xl sm:text-5xl lg:text-[3.25rem] font-extrabold text-white leading-[1.12] tracking-tight">
+              Clinical Equipment<br/>
+              <span class="text-cyan-300">Engineered</span> for<br/>
+              Better Patient Care
+            </h1>
+
+            <p class="mt-6 text-lg text-teal-100 leading-[1.75] max-w-lg" style="font-family:'Noto Sans',sans-serif;">
+              Precision-built monitoring, surgical, and diagnostic systems trusted by 2,400&nbsp;+ hospitals in 48 countries. Cut equipment downtime, reduce alarm fatigue, and integrate seamlessly with your EHR.
+            </p>
+
+            <div class="mt-9 flex flex-col sm:flex-row gap-4">
+              <a href="#contact"
+                class="btn-primary inline-flex items-center justify-center gap-2 bg-health-green hover:bg-health-green-dark text-white font-semibold text-base px-7 py-3.5 rounded-xl transition-colors duration-200 cursor-pointer min-h-[52px] focus-visible:ring-4 focus-visible:ring-green-300 focus-visible:ring-offset-0">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Book a Free Demo
+              </a>
+              <a href="#solutions"
+                class="btn-secondary inline-flex items-center justify-center gap-2 border-2 border-white/30 text-white font-semibold text-base px-7 py-3.5 rounded-xl hover:border-white/70 hover:bg-white/10 transition-colors duration-200 cursor-pointer min-h-[52px]">
+                Explore Solutions
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+
+            <!-- Social proof strip -->
+            <div class="mt-10 flex items-center gap-4">
+              <div class="flex -space-x-2" aria-label="Healthcare clients">
+                <div class="w-10 h-10 rounded-full border-2 border-teal-700 bg-teal-200 flex items-center justify-center text-teal-900 text-xs font-bold">JH</div>
+                <div class="w-10 h-10 rounded-full border-2 border-teal-700 bg-cyan-200 flex items-center justify-center text-cyan-900 text-xs font-bold">MC</div>
+                <div class="w-10 h-10 rounded-full border-2 border-teal-700 bg-teal-300 flex items-center justify-center text-teal-900 text-xs font-bold">SH</div>
+                <div class="w-10 h-10 rounded-full border-2 border-teal-700 bg-cyan-300 flex items-center justify-center text-teal-900 text-xs font-bold">NY</div>
+              </div>
+              <p class="text-sm text-teal-100" style="font-family:'Noto Sans',sans-serif;">
+                <strong class="text-white font-semibold">2,400+</strong> hospitals trust MediCore Pro globally
+              </p>
+            </div>
           </div>
-          <h1 id="hero-heading" class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
-            Advanced Medical<br/>
-            <span class="text-blue-200">Equipment</span> Built<br/>
-            for Hospitals
-          </h1>
-          <p class="mt-6 text-lg text-blue-100 leading-relaxed max-w-xl">
-            Precision-engineered diagnostic and surgical equipment trusted by over 2,400 hospitals worldwide. Reduce downtime, improve patient outcomes, and streamline clinical workflows.
+
+          <!-- Right: monitor card -->
+          <div class="hidden lg:block" aria-label="Live patient monitor preview">
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden border border-teal-100">
+
+              <!-- Card header -->
+              <div class="bg-teal-800 px-5 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 rounded-full bg-health-green" aria-label="Device online"></div>
+                  <span class="text-white text-sm font-semibold" style="font-family:'Figtree',sans-serif;">VitaTrack X9 — Bed 4B</span>
+                </div>
+                <span class="text-teal-300 text-xs">Live</span>
+              </div>
+
+              <!-- Vitals grid -->
+              <div class="p-5 grid grid-cols-2 gap-3">
+                <div class="bg-red-50 border border-red-100 rounded-xl p-4">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"/></svg>
+                    <span class="text-xs font-medium text-slate-500" style="font-family:'Noto Sans',sans-serif;">Heart Rate</span>
+                  </div>
+                  <div class="font-heading text-2xl font-bold text-slate-800">72 <span class="text-sm font-normal text-slate-400">bpm</span></div>
+                  <div class="mt-1 h-1 w-full bg-red-100 rounded-full"><div class="h-1 w-3/5 bg-red-400 rounded-full"></div></div>
+                </div>
+
+                <div class="bg-cyan-50 border border-cyan-100 rounded-xl p-4">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <svg class="w-4 h-4 text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    <span class="text-xs font-medium text-slate-500" style="font-family:'Noto Sans',sans-serif;">Blood Pressure</span>
+                  </div>
+                  <div class="font-heading text-2xl font-bold text-slate-800">118<span class="text-sm font-normal text-slate-400">/76</span></div>
+                  <div class="text-xs text-health-green-dark font-medium mt-1" style="font-family:'Noto Sans',sans-serif;">Normal range</div>
+                </div>
+
+                <div class="bg-teal-50 border border-teal-100 rounded-xl p-4">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <svg class="w-4 h-4 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xs font-medium text-slate-500" style="font-family:'Noto Sans',sans-serif;">SpO₂</span>
+                  </div>
+                  <div class="font-heading text-2xl font-bold text-slate-800">98 <span class="text-sm font-normal text-slate-400">%</span></div>
+                  <div class="text-xs text-health-green-dark font-medium mt-1" style="font-family:'Noto Sans',sans-serif;">Optimal</div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                  <div class="flex items-center gap-1.5 mb-1">
+                    <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="13" r="3"/></svg>
+                    <span class="text-xs font-medium text-slate-500" style="font-family:'Noto Sans',sans-serif;">Temperature</span>
+                  </div>
+                  <div class="font-heading text-2xl font-bold text-slate-800">37.1 <span class="text-sm font-normal text-slate-400">°C</span></div>
+                  <div class="text-xs text-health-green-dark font-medium mt-1" style="font-family:'Noto Sans',sans-serif;">Afebrile</div>
+                </div>
+              </div>
+
+              <!-- Footer bar -->
+              <div class="bg-teal-50 border-t border-teal-100 px-5 py-3 flex items-center justify-between">
+                <span class="text-xs text-teal-600" style="font-family:'Noto Sans',sans-serif;">Last updated: just now · Epic synced</span>
+                <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-health-green-dark bg-green-100 px-2 py-1 rounded-full">
+                  <span class="w-1.5 h-1.5 rounded-full bg-health-green"></span>All Stable
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TRUST BAR ──────────────────────────────────── -->
+    <section class="bg-white border-b border-teal-100 py-5" aria-label="Trust indicators">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-xs font-semibold text-teal-500 uppercase tracking-widest mb-5" style="font-family:'Figtree',sans-serif;" aria-hidden="true">Trusted by leading healthcare institutions</p>
+        <div class="flex flex-wrap justify-center gap-6 sm:gap-10 items-center text-teal-400" aria-label="Partner hospitals">
+          <span class="font-heading font-bold text-base tracking-tight text-teal-600 opacity-70">Johns Hopkins Medicine</span>
+          <span class="font-heading font-bold text-base tracking-tight text-teal-600 opacity-70">Mayo Clinic</span>
+          <span class="font-heading font-bold text-base tracking-tight text-teal-600 opacity-70">Cleveland Clinic</span>
+          <span class="font-heading font-bold text-base tracking-tight text-teal-600 opacity-70">Stanford Health Care</span>
+          <span class="font-heading font-bold text-base tracking-tight text-teal-600 opacity-70">NHS England</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── STATS ─────────────────────────────────────── -->
+    <section class="bg-teal-800 py-14" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="sr-only">Key statistics</h2>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <dl class="grid grid-cols-2 lg:grid-cols-4 gap-px bg-teal-700/40 rounded-2xl overflow-hidden">
+          <div class="bg-teal-800 p-8 text-center reveal">
+            <dt class="stat-num text-4xl font-extrabold text-white">2,400<span class="text-cyan-400">+</span></dt>
+            <dd class="mt-2 text-sm font-medium text-teal-300" style="font-family:'Noto Sans',sans-serif;">Hospitals Worldwide</dd>
+          </div>
+          <div class="bg-teal-800 p-8 text-center reveal" style="transition-delay:.1s">
+            <dt class="stat-num text-4xl font-extrabold text-white">99.9<span class="text-cyan-400">%</span></dt>
+            <dd class="mt-2 text-sm font-medium text-teal-300" style="font-family:'Noto Sans',sans-serif;">Equipment Uptime SLA</dd>
+          </div>
+          <div class="bg-teal-800 p-8 text-center reveal" style="transition-delay:.2s">
+            <dt class="stat-num text-4xl font-extrabold text-white">40<span class="text-cyan-400">%</span></dt>
+            <dd class="mt-2 text-sm font-medium text-teal-300" style="font-family:'Noto Sans',sans-serif;">Fewer Clinical Errors</dd>
+          </div>
+          <div class="bg-teal-800 p-8 text-center reveal" style="transition-delay:.3s">
+            <dt class="stat-num text-4xl font-extrabold text-white">&lt;4h</dt>
+            <dd class="mt-2 text-sm font-medium text-teal-300" style="font-family:'Noto Sans',sans-serif;">On-site Response Time</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ── PROBLEM / VALUE ────────────────────────────── -->
+    <section class="bg-teal-50 py-20 lg:py-24" aria-labelledby="problem-heading">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+        <h2 id="problem-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-teal-900 leading-tight tracking-tight">
+          Equipment Failures Cost Hospitals <span class="text-cyan-600">$1.5B</span> Per Year
+        </h2>
+        <p class="mt-5 text-lg text-teal-700 leading-[1.75]" style="font-family:'Noto Sans',sans-serif;">
+          Outdated monitoring systems, fragmented workflows, and poor EHR integration are putting patient safety at risk — and burning out clinical staff. MediCore Pro solves all three.
+        </p>
+        <div class="mt-10 grid sm:grid-cols-3 gap-4 text-left">
+          <div class="bg-white border border-teal-100 rounded-xl p-5 shadow-sm">
+            <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center mb-3" aria-hidden="true">
+              <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-teal-900 mb-1">Alarm Fatigue</h3>
+            <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Clinicians receive 350–700 alarms per bed per day — most non-actionable, all distracting.</p>
+          </div>
+          <div class="bg-white border border-teal-100 rounded-xl p-5 shadow-sm">
+            <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-3" aria-hidden="true">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-teal-900 mb-1">Integration Gaps</h3>
+            <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Manual data entry between devices and EHRs introduces errors and wastes 2+ hours per nurse per shift.</p>
+          </div>
+          <div class="bg-white border border-teal-100 rounded-xl p-5 shadow-sm">
+            <div class="w-10 h-10 bg-cyan-50 rounded-lg flex items-center justify-center mb-3" aria-hidden="true">
+              <svg class="w-5 h-5 text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="font-heading font-bold text-teal-900 mb-1">Compliance Risk</h3>
+            <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Outdated equipment regularly fails HIPAA, IEC 60601, and Joint Commission audits, triggering penalties.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SOLUTIONS ──────────────────────────────────── -->
+    <section id="solutions" class="bg-white py-20 lg:py-28" aria-labelledby="solutions-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+          <span class="inline-block text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4" style="font-family:'Figtree',sans-serif;">Our Solutions</span>
+          <h2 id="solutions-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">
+            Purpose-Built for Every Clinical Environment
+          </h2>
+          <p class="mt-4 text-base text-teal-600 leading-[1.75]" style="font-family:'Noto Sans',sans-serif;">
+            From bedside monitoring to operating theatres — complete clinical hardware and software, deeply integrated into your existing workflows.
           </p>
-          <div class="mt-8 flex flex-col sm:flex-row gap-4">
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Card 1 -->
+          <article class="lift bg-white border border-teal-100 rounded-2xl overflow-hidden shadow-sm cursor-default reveal">
+            <div class="h-2 bg-gradient-to-r from-cyan-500 to-teal-500"></div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-cyan-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-teal-900 mb-2">Patient Monitoring</h3>
+              <p class="text-sm text-teal-600 leading-relaxed mb-4" style="font-family:'Noto Sans',sans-serif;">Continuous multi-parameter vitals with AI-driven early warning scoring and &lt;2ms alert latency across ICU, wards, and HDU.</p>
+              <ul class="space-y-2" aria-label="Features">
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">ECG, SpO₂, NIBP, EtCO₂, temperature</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Smart alarm deduplication — 73% fewer false alerts</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">HL7 FHIR R4 real-time data push</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="lift bg-white border border-teal-100 rounded-2xl overflow-hidden shadow-sm cursor-default reveal" style="transition-delay:.1s">
+            <div class="h-2 bg-gradient-to-r from-teal-500 to-emerald-500"></div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-teal-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-teal-900 mb-2">Surgical Suite Systems</h3>
+              <p class="text-sm text-teal-600 leading-relaxed mb-4" style="font-family:'Noto Sans',sans-serif;">Integrated OR management connecting anaesthesia workstations, electrosurgical units, and imaging into one control hub.</p>
+              <ul class="space-y-2" aria-label="Features">
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Automated anaesthetic records</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">DICOM 3.0 imaging integration</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">37% reduction in procedure delays</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="lift bg-white border border-teal-100 rounded-2xl overflow-hidden shadow-sm cursor-default reveal" style="transition-delay:.2s">
+            <div class="h-2 bg-gradient-to-r from-violet-400 to-cyan-500"></div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-violet-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-teal-900 mb-2">Cybersecurity & Compliance</h3>
+              <p class="text-sm text-teal-600 leading-relaxed mb-4" style="font-family:'Noto Sans',sans-serif;">HIPAA-grade security built in from the hardware layer up — AES-256 encryption, zero-trust network access, and complete audit trails.</p>
+              <ul class="space-y-2" aria-label="Features">
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">SOC 2 Type II & ISO 27001</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Role-based access with MFA</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Immutable audit log storage</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Card 4 -->
+          <article class="lift bg-white border border-teal-100 rounded-2xl overflow-hidden shadow-sm cursor-default reveal">
+            <div class="h-2 bg-gradient-to-r from-amber-400 to-orange-400"></div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-teal-900 mb-2">AI Diagnostic Intelligence</h3>
+              <p class="text-sm text-teal-600 leading-relaxed mb-4" style="font-family:'Noto Sans',sans-serif;">Embedded AI surfaces deterioration risk, ECG anomalies, and imaging findings before clinical thresholds are breached.</p>
+              <ul class="space-y-2" aria-label="Features">
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">NEWS2 / EWS early warning scoring</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Arrhythmia detection &amp; classification</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">FDA-validated sepsis risk model</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Card 5 -->
+          <article class="lift bg-white border border-teal-100 rounded-2xl overflow-hidden shadow-sm cursor-default reveal" style="transition-delay:.1s">
+            <div class="h-2 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
+            <div class="p-6">
+              <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-teal-900 mb-2">EHR &amp; HIS Integration</h3>
+              <p class="text-sm text-teal-600 leading-relaxed mb-4" style="font-family:'Noto Sans',sans-serif;">Native connectors for Epic, Cerner, Meditech, and any HL7 FHIR R4 endpoint — zero custom middleware, zero data silos.</p>
+              <ul class="space-y-2" aria-label="Features">
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Epic &amp; Cerner App Orchard certified</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">Bidirectional real-time data sync</span>
+                </li>
+                <li class="flex items-start gap-2 text-sm text-teal-700">
+                  <svg class="w-4 h-4 text-health-green mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+                  <span style="font-family:'Noto Sans',sans-serif;">RESTful API + webhook support</span>
+                </li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Card 6 — CTA card -->
+          <article class="bg-teal-700 rounded-2xl p-6 shadow-sm reveal flex flex-col justify-between" style="transition-delay:.2s">
+            <div>
+              <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
+                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              </div>
+              <h3 class="font-heading text-lg font-bold text-white mb-2">24 / 7 Clinical Support</h3>
+              <p class="text-sm text-teal-200 leading-relaxed mb-5" style="font-family:'Noto Sans',sans-serif;">Dedicated biomedical engineers on call around the clock. Remote diagnostics and &lt;4h guaranteed on-site response across North America and Europe.</p>
+            </div>
             <a href="#contact"
-              class="inline-flex items-center justify-center gap-2 bg-white text-medical-700 font-bold text-base px-7 py-3.5 rounded-xl hover:bg-blue-50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-medical-600 shadow-lg">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-              </svg>
-              Book a Demo
+              class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/40 px-4 py-2.5 rounded-lg transition-colors duration-200 cursor-pointer min-h-[44px] focus-visible:ring-2 focus-visible:ring-white w-fit">
+              Contact Support
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <a href="#features"
-              class="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-semibold text-base px-7 py-3.5 rounded-xl hover:border-white hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-medical-600">
-              Explore Equipment
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-              </svg>
-            </a>
-          </div>
-          <div class="mt-10 flex items-center gap-6">
-            <div class="flex -space-x-2" aria-label="Hospital clients">
-              <div class="w-9 h-9 rounded-full bg-blue-300 border-2 border-white flex items-center justify-center text-xs font-bold text-medical-800">JH</div>
-              <div class="w-9 h-9 rounded-full bg-indigo-300 border-2 border-white flex items-center justify-center text-xs font-bold text-indigo-800">MC</div>
-              <div class="w-9 h-9 rounded-full bg-sky-300 border-2 border-white flex items-center justify-center text-xs font-bold text-sky-800">ST</div>
-              <div class="w-9 h-9 rounded-full bg-teal-300 border-2 border-white flex items-center justify-center text-xs font-bold text-teal-800">NY</div>
-            </div>
-            <p class="text-blue-100 text-sm"><strong class="text-white">2,400+</strong> hospitals trust MediCore Pro</p>
-          </div>
-        </div>
-        <!-- Hero image placeholder -->
-        <div class="relative hidden lg:block" aria-hidden="true">
-          <div class="absolute -inset-4 bg-white/5 rounded-3xl blur-xl"></div>
-          <div class="relative bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 shadow-2xl">
-            <div class="bg-white rounded-xl p-5 shadow-lg">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <div class="text-xs text-slate-500 font-medium">Patient Monitor</div>
-                  <div class="text-lg font-bold text-slate-800">VitaTrack X9</div>
-                </div>
-                <div class="w-3 h-3 bg-green-400 rounded-full shadow-sm shadow-green-400"></div>
-              </div>
-              <div class="space-y-3">
-                <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/></svg>
-                    <span class="text-xs font-medium text-slate-600">Heart Rate</span>
-                  </div>
-                  <span class="text-sm font-bold text-slate-800">74 <span class="text-xs font-normal text-slate-400">bpm</span></span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                    <span class="text-xs font-medium text-slate-600">Blood Pressure</span>
-                  </div>
-                  <span class="text-sm font-bold text-slate-800">120/80 <span class="text-xs font-normal text-slate-400">mmHg</span></span>
-                </div>
-                <div class="flex justify-between items-center p-3 bg-teal-50 rounded-lg">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    <span class="text-xs font-medium text-slate-600">SpO₂</span>
-                  </div>
-                  <span class="text-sm font-bold text-slate-800">98 <span class="text-xs font-normal text-slate-400">%</span></span>
-                </div>
-              </div>
-              <div class="mt-4 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                <div class="h-full w-3/4 bg-medical-500 rounded-full"></div>
-              </div>
-              <p class="text-xs text-slate-400 mt-1">Battery: 75% · 6h 20m remaining</p>
-            </div>
-            <div class="mt-4 grid grid-cols-2 gap-3">
-              <div class="bg-white/80 rounded-xl p-3 text-center border border-white/40">
-                <div class="text-2xl font-extrabold text-medical-700">99.9%</div>
-                <div class="text-xs text-slate-500 mt-0.5">Uptime SLA</div>
-              </div>
-              <div class="bg-white/80 rounded-xl p-3 text-center border border-white/40">
-                <div class="text-2xl font-extrabold text-medical-700">&lt;2ms</div>
-                <div class="text-xs text-slate-500 mt-0.5">Alert Latency</div>
-              </div>
-            </div>
-          </div>
+          </article>
+
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ─── TRUST STATS ───────────────────────────────────────── -->
-  <section class="bg-slate-50 border-y border-slate-100 py-12" aria-label="Key statistics">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <dl class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div class="fade-in">
-          <dt class="text-3xl font-extrabold text-medical-700">2,400<span class="text-medical-400">+</span></dt>
-          <dd class="mt-1 text-sm font-medium text-slate-500">Hospitals Worldwide</dd>
+    <!-- ── HOW IT WORKS ────────────────────────────────── -->
+    <section id="how-it-works" class="bg-teal-50 py-20 lg:py-28" aria-labelledby="hiw-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+          <span class="inline-block text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4" style="font-family:'Figtree',sans-serif;">Deployment</span>
+          <h2 id="hiw-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">Live in 6 Weeks — Guaranteed</h2>
+          <p class="mt-4 text-base text-teal-600 leading-[1.75]" style="font-family:'Noto Sans',sans-serif;">Our clinical implementation team manages every step, from site survey to go-live, with zero disruption to patient care.</p>
         </div>
-        <div class="fade-in" style="transition-delay:0.1s">
-          <dt class="text-3xl font-extrabold text-medical-700">98<span class="text-medical-400">%</span></dt>
-          <dd class="mt-1 text-sm font-medium text-slate-500">Clinical Satisfaction</dd>
-        </div>
-        <div class="fade-in" style="transition-delay:0.2s">
-          <dt class="text-3xl font-extrabold text-medical-700">40<span class="text-medical-400">%</span></dt>
-          <dd class="mt-1 text-sm font-medium text-slate-500">Fewer Equipment Errors</dd>
-        </div>
-        <div class="fade-in" style="transition-delay:0.3s">
-          <dt class="text-3xl font-extrabold text-medical-700">24/7</dt>
-          <dd class="mt-1 text-sm font-medium text-slate-500">Technical Support</dd>
-        </div>
-      </dl>
-    </div>
-  </section>
 
-  <!-- ─── FEATURES ─────────────────────────────────────────── -->
-  <section id="features" class="py-20 lg:py-28 bg-white" aria-labelledby="features-heading">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
-        <div class="inline-flex items-center gap-2 text-medical-600 text-sm font-semibold bg-medical-50 px-3 py-1.5 rounded-full mb-4">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
-          Product Features
+        <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-label="Deployment steps">
+          <li class="reveal">
+            <div class="bg-white border border-teal-100 rounded-2xl p-6 shadow-sm h-full">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-cyan-600 text-white font-heading font-extrabold text-lg rounded-full flex items-center justify-center flex-shrink-0">1</span>
+                <div class="h-px flex-1 bg-teal-100"></div>
+              </div>
+              <h3 class="font-heading font-bold text-teal-900 mb-2">Site Assessment</h3>
+              <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Biomedical engineers audit power, network, and integration requirements across your facilities.</p>
+            </div>
+          </li>
+          <li class="reveal" style="transition-delay:.1s">
+            <div class="bg-white border border-teal-100 rounded-2xl p-6 shadow-sm h-full">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-cyan-600 text-white font-heading font-extrabold text-lg rounded-full flex items-center justify-center flex-shrink-0">2</span>
+                <div class="h-px flex-1 bg-teal-100"></div>
+              </div>
+              <h3 class="font-heading font-bold text-teal-900 mb-2">Custom Configuration</h3>
+              <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Equipment is pre-configured to your alarm protocols, clinical workflows, and EHR endpoints before delivery.</p>
+            </div>
+          </li>
+          <li class="reveal" style="transition-delay:.2s">
+            <div class="bg-white border border-teal-100 rounded-2xl p-6 shadow-sm h-full">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-cyan-600 text-white font-heading font-extrabold text-lg rounded-full flex items-center justify-center flex-shrink-0">3</span>
+                <div class="h-px flex-1 bg-teal-100"></div>
+              </div>
+              <h3 class="font-heading font-bold text-teal-900 mb-2">Staff Training</h3>
+              <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">On-site and e-learning for nurses, clinicians, and biomedical teams — accredited CPD hours provided.</p>
+            </div>
+          </li>
+          <li class="reveal" style="transition-delay:.3s">
+            <div class="bg-white border border-teal-100 rounded-2xl p-6 shadow-sm h-full">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="w-10 h-10 bg-cyan-600 text-white font-heading font-extrabold text-lg rounded-full flex items-center justify-center flex-shrink-0">4</span>
+                <div class="h-px flex-1 bg-teal-100"></div>
+              </div>
+              <h3 class="font-heading font-bold text-teal-900 mb-2">Go-Live &amp; Hypercare</h3>
+              <p class="text-sm text-teal-600 leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Dedicated 30-day hypercare period with on-site support, then continuous 24/7 remote monitoring.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ── TESTIMONIALS ───────────────────────────────── -->
+    <section id="testimonials" class="bg-white py-20 lg:py-28" aria-labelledby="testimonials-heading">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+          <span class="inline-block text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4" style="font-family:'Figtree',sans-serif;">Clinical Voices</span>
+          <h2 id="testimonials-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">What Hospital Teams Say</h2>
         </div>
-        <h2 id="features-heading" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Everything Your Clinical Team Needs
+
+        <div class="grid md:grid-cols-3 gap-6">
+
+          <blockquote class="lift bg-teal-50 border border-teal-100 rounded-2xl p-6 shadow-sm reveal cursor-default">
+            <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="quote-mark text-teal-800 text-sm leading-[1.75] italic" style="font-family:'Noto Sans',sans-serif;">
+              MediCore Pro's smart alarm deduplication cut our ICU alarm fatigue by 73% in the first month. The AI early warning has already triggered three rapid response calls that we would have caught later.
+            </p>
+            <footer class="mt-5 flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-teal-700 flex items-center justify-center text-white font-heading font-bold text-sm flex-shrink-0" aria-hidden="true">SL</div>
+              <div>
+                <cite class="not-italic font-heading font-semibold text-teal-900">Dr. Sarah Lindberg</cite>
+                <p class="text-xs text-teal-500 mt-0.5" style="font-family:'Noto Sans',sans-serif;">Chief of Critical Care · Johns Hopkins Medicine</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="lift bg-teal-50 border border-teal-100 rounded-2xl p-6 shadow-sm reveal cursor-default" style="transition-delay:.1s">
+            <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="quote-mark text-teal-800 text-sm leading-[1.75] italic" style="font-family:'Noto Sans',sans-serif;">
+              The Epic integration was turnkey. We were fully live across four surgical theatres in just 4 weeks — no custom development, no downtime. Our anaesthetists said it was the smoothest technology rollout they'd experienced.
+            </p>
+            <footer class="mt-5 flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-emerald-600 flex items-center justify-center text-white font-heading font-bold text-sm flex-shrink-0" aria-hidden="true">MP</div>
+              <div>
+                <cite class="not-italic font-heading font-semibold text-teal-900">Michael Patel</cite>
+                <p class="text-xs text-teal-500 mt-0.5" style="font-family:'Noto Sans',sans-serif;">Director of Biomedical Eng. · Mayo Clinic</p>
+              </div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="lift bg-teal-50 border border-teal-100 rounded-2xl p-6 shadow-sm reveal cursor-default" style="transition-delay:.2s">
+            <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+              <svg class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            </div>
+            <p class="quote-mark text-teal-800 text-sm leading-[1.75] italic" style="font-family:'Noto Sans',sans-serif;">
+              Procedure delays in our cardiac ORs dropped 37% after switching to MediCore Pro. When we had a unit fault at 2am, an engineer was remote-diagnosing within 12 minutes. That level of support is unmatched.
+            </p>
+            <footer class="mt-5 flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-cyan-600 flex items-center justify-center text-white font-heading font-bold text-sm flex-shrink-0" aria-hidden="true">RK</div>
+              <div>
+                <cite class="not-italic font-heading font-semibold text-teal-900">Dr. Ranjit Kumar</cite>
+                <p class="text-xs text-teal-500 mt-0.5" style="font-family:'Noto Sans',sans-serif;">Head of Cardiac Surgery · Stanford Health Care</p>
+              </div>
+            </footer>
+          </blockquote>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA BANNER ─────────────────────────────────── -->
+    <section class="hero-bg py-16 lg:py-20" aria-labelledby="cta-heading">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+        <h2 id="cta-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-white leading-tight tracking-tight">
+          Ready to Elevate Patient Care at Your Hospital?
         </h2>
-        <p class="mt-4 text-lg text-slate-500 leading-relaxed">
-          From bedside monitoring to surgical suites — purpose-built hardware and software that works the way clinicians do.
+        <p class="mt-4 text-lg text-teal-100 leading-[1.75]" style="font-family:'Noto Sans',sans-serif;">
+          Get a custom quote and live demo from a clinical solutions specialist within 24 hours — no commitment required.
         </p>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <article class="card-hover bg-white border border-slate-200 rounded-2xl p-6 shadow-sm fade-in">
-          <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-medical-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Real-Time Patient Monitoring</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Continuous vital sign tracking with sub-2ms alert latency. ECG, SpO₂, NIBP, and temperature — all on one unified dashboard.
-          </p>
-          <ul class="mt-4 space-y-1.5" aria-label="Features list">
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Multi-parameter simultaneous tracking
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Customisable alarm thresholds
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              HL7 & FHIR integration
-            </li>
-          </ul>
-        </article>
-
-        <article class="card-hover bg-white border border-slate-200 rounded-2xl p-6 shadow-sm fade-in" style="transition-delay:0.1s">
-          <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Surgical Suite Integration</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Seamlessly connects anaesthesia workstations, electrosurgical units, and imaging systems into a single OR control hub.
-          </p>
-          <ul class="mt-4 space-y-1.5" aria-label="Features list">
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Centralised OR management
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Auto anaesthetic records
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              DICOM imaging integration
-            </li>
-          </ul>
-        </article>
-
-        <article class="card-hover bg-white border border-slate-200 rounded-2xl p-6 shadow-sm fade-in" style="transition-delay:0.2s">
-          <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Compliance & Cybersecurity</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            HIPAA-compliant data handling, end-to-end encryption, and role-based access control built in from day one.
-          </p>
-          <ul class="mt-4 space-y-1.5" aria-label="Features list">
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              AES-256 data encryption
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Audit logs & access control
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              SOC 2 Type II certified
-            </li>
-          </ul>
-        </article>
-
-        <article class="card-hover bg-white border border-slate-200 rounded-2xl p-6 shadow-sm fade-in" style="transition-delay:0.1s">
-          <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">AI-Powered Diagnostics</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Embedded AI algorithms surface early warning indicators and anomaly patterns before they escalate into critical events.
-          </p>
-          <ul class="mt-4 space-y-1.5" aria-label="Features list">
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Predictive deterioration scoring
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              ECG arrhythmia detection
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Imaging anomaly flagging
-            </li>
-          </ul>
-        </article>
-
-        <article class="card-hover bg-white border border-slate-200 rounded-2xl p-6 shadow-sm fade-in" style="transition-delay:0.2s">
-          <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">EHR & HIS Integration</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Plug directly into Epic, Cerner, Meditech, and any HL7 FHIR R4 endpoint — zero custom middleware required.
-          </p>
-          <ul class="mt-4 space-y-1.5" aria-label="Features list">
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Epic & Cerner certified
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              Auto patient data sync
-            </li>
-            <li class="flex items-center gap-2 text-xs text-slate-600">
-              <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-              RESTful API & webhooks
-            </li>
-          </ul>
-        </article>
-
-        <article class="card-hover bg-medical-600 rounded-2xl p-6 shadow-sm fade-in" style="transition-delay:0.3s">
-          <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-4" aria-hidden="true">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">24/7 Technical Support</h3>
-          <p class="text-blue-100 text-sm leading-relaxed">
-            On-call biomedical engineers, remote diagnostics, and guaranteed 4-hour on-site response anywhere in North America.
-          </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
           <a href="#contact"
-            class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white border border-white/30 rounded-lg px-4 py-2 hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white">
-            Contact Support
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            class="btn-primary inline-flex items-center justify-center gap-2 bg-health-green hover:bg-health-green-dark text-white font-bold text-base px-8 py-4 rounded-xl transition-colors duration-200 cursor-pointer min-h-[56px] shadow-lg focus-visible:ring-4 focus-visible:ring-green-300">
+            Request a Free Demo
           </a>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ─── HOW IT WORKS ─────────────────────────────────────── -->
-  <section id="how-it-works" class="py-20 lg:py-28 bg-slate-50" aria-labelledby="hiw-heading">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
-        <div class="inline-flex items-center gap-2 text-medical-600 text-sm font-semibold bg-medical-50 px-3 py-1.5 rounded-full mb-4">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          Simple Deployment
+          <a href="tel:+18005550199"
+            class="btn-secondary inline-flex items-center justify-center gap-2 border-2 border-white/40 hover:border-white/70 hover:bg-white/10 text-white font-semibold text-base px-8 py-4 rounded-xl transition-colors duration-200 cursor-pointer min-h-[56px]">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            1-800-555-0199
+          </a>
         </div>
-        <h2 id="hiw-heading" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Up and Running in 4 Steps
-        </h2>
-        <p class="mt-4 text-lg text-slate-500">
-          Our clinical implementation team handles everything from site survey to go-live — typically in under 6 weeks.
-        </p>
       </div>
-      <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-label="Deployment steps">
-        <li class="relative fade-in">
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm h-full">
-            <div class="flex items-center justify-between mb-4">
-              <span class="w-10 h-10 rounded-full bg-medical-600 text-white font-extrabold text-lg flex items-center justify-center" aria-hidden="true">1</span>
-              <svg class="w-8 h-8 text-medical-100" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/></svg>
-            </div>
-            <h3 class="font-bold text-slate-900 mb-2">Site Assessment</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">Our biomedical engineers audit your existing infrastructure, power, and connectivity.</p>
-          </div>
-        </li>
-        <li class="relative fade-in" style="transition-delay:0.1s">
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm h-full">
-            <div class="flex items-center justify-between mb-4">
-              <span class="w-10 h-10 rounded-full bg-medical-600 text-white font-extrabold text-lg flex items-center justify-center" aria-hidden="true">2</span>
-              <svg class="w-8 h-8 text-medical-100" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
-            </div>
-            <h3 class="font-bold text-slate-900 mb-2">Custom Configuration</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">Equipment is pre-configured to your clinical workflows, alarm protocols, and EHR endpoints.</p>
-          </div>
-        </li>
-        <li class="relative fade-in" style="transition-delay:0.2s">
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm h-full">
-            <div class="flex items-center justify-between mb-4">
-              <span class="w-10 h-10 rounded-full bg-medical-600 text-white font-extrabold text-lg flex items-center justify-center" aria-hidden="true">3</span>
-              <svg class="w-8 h-8 text-medical-100" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/></svg>
-            </div>
-            <h3 class="font-bold text-slate-900 mb-2">Staff Training</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">On-site and online training for nurses, clinicians, and biomedical staff — accredited CPD hours included.</p>
-          </div>
-        </li>
-        <li class="relative fade-in" style="transition-delay:0.3s">
-          <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm h-full">
-            <div class="flex items-center justify-between mb-4">
-              <span class="w-10 h-10 rounded-full bg-medical-600 text-white font-extrabold text-lg flex items-center justify-center" aria-hidden="true">4</span>
-              <svg class="w-8 h-8 text-medical-100" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/></svg>
-            </div>
-            <h3 class="font-bold text-slate-900 mb-2">Go Live & Monitor</h3>
-            <p class="text-sm text-slate-500 leading-relaxed">Full go-live support, 30-day hyper-care period, and continuous remote monitoring from day one.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
+    </section>
 
-  <!-- ─── TESTIMONIALS ──────────────────────────────────────── -->
-  <section id="testimonials" class="py-20 lg:py-28 bg-white" aria-labelledby="testimonials-heading">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-14 fade-in">
-        <div class="inline-flex items-center gap-2 text-medical-600 text-sm font-semibold bg-medical-50 px-3 py-1.5 rounded-full mb-4">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          Trusted by Clinicians
+    <!-- ── CONTACT FORM ────────────────────────────────── -->
+    <section id="contact" class="bg-teal-50 py-20 lg:py-28" aria-labelledby="contact-heading">
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10 reveal">
+          <span class="inline-block text-xs font-bold text-cyan-700 bg-cyan-50 border border-cyan-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4" style="font-family:'Figtree',sans-serif;">Contact Us</span>
+          <h2 id="contact-heading" class="font-heading text-3xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">Talk to a Clinical Specialist</h2>
+          <p class="mt-3 text-base text-teal-600" style="font-family:'Noto Sans',sans-serif;">We respond within one business day. Prefer a call? <a href="tel:+18005550199" class="text-cyan-700 font-semibold underline underline-offset-2 hover:text-cyan-900">1-800-555-0199</a></p>
         </div>
-        <h2 id="testimonials-heading" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          What Hospital Teams Say
-        </h2>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6">
 
-        <blockquote class="card-hover bg-slate-50 rounded-2xl p-6 border border-slate-100 fade-in">
-          <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-slate-700 text-sm leading-relaxed italic">
-            "MediCore Pro's monitors halved our alarm fatigue incidents in the ICU. The AI early warning has caught three rapid response events before our nursing staff would have caught them manually."
-          </p>
-          <footer class="mt-5 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-medical-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">SL</div>
+        <form class="bg-white border border-teal-100 rounded-2xl shadow-sm p-8 reveal" novalidate aria-label="Contact form">
+          <div class="grid sm:grid-cols-2 gap-5">
+
             <div>
-              <cite class="not-italic font-semibold text-slate-900 text-sm">Dr. Sarah L.</cite>
-              <p class="text-xs text-slate-500">Chief of Critical Care · Johns Hopkins Medical Center</p>
+              <label for="fname" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">
+                First Name <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input id="fname" type="text" name="first-name" autocomplete="given-name" required
+                placeholder="Jane"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" />
             </div>
-          </footer>
-        </blockquote>
 
-        <blockquote class="card-hover bg-slate-50 rounded-2xl p-6 border border-slate-100 fade-in" style="transition-delay:0.1s">
-          <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-slate-700 text-sm leading-relaxed italic">
-            "The Epic integration was seamless. Our biomedical team was sceptical but we were fully integrated and staff trained within 4 weeks — no custom development, no downtime."
-          </p>
-          <footer class="mt-5 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">MP</div>
             <div>
-              <cite class="not-italic font-semibold text-slate-900 text-sm">Michael P.</cite>
-              <p class="text-xs text-slate-500">Director of Biomedical Engineering · Mayo Clinic</p>
+              <label for="lname" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">
+                Last Name <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input id="lname" type="text" name="last-name" autocomplete="family-name" required
+                placeholder="Smith"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" />
             </div>
-          </footer>
-        </blockquote>
 
-        <blockquote class="card-hover bg-slate-50 rounded-2xl p-6 border border-slate-100 fade-in" style="transition-delay:0.2s">
-          <div class="flex gap-0.5 mb-4" aria-label="5 out of 5 stars">
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-          <p class="text-slate-700 text-sm leading-relaxed italic">
-            "After switching to MediCore Pro in our surgical suites, equipment-related procedure delays dropped by 37%. The 24/7 support team is genuinely exceptional."
-          </p>
-          <footer class="mt-5 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">RK</div>
             <div>
-              <cite class="not-italic font-semibold text-slate-900 text-sm">Dr. Ranjit K.</cite>
-              <p class="text-xs text-slate-500">Head of Cardiac Surgery · Stanford Health</p>
+              <label for="work-email" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">
+                Work Email <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input id="work-email" type="email" name="email" autocomplete="email" required
+                placeholder="jane@hospital.org"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" />
             </div>
-          </footer>
-        </blockquote>
 
+            <div>
+              <label for="phone-num" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">Phone Number</label>
+              <input id="phone-num" type="tel" name="phone" autocomplete="tel"
+                placeholder="+1 (555) 000-0000"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="hospital-name" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">
+                Hospital / Organisation <span class="text-red-500" aria-hidden="true">*</span>
+              </label>
+              <input id="hospital-name" type="text" name="hospital" required
+                placeholder="City General Hospital"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="interest-area" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">Area of Interest</label>
+              <select id="interest-area" name="interest"
+                class="w-full min-h-[44px] rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-2.5 text-sm text-teal-900 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 cursor-pointer">
+                <option value="">Select equipment type…</option>
+                <option>Patient Monitoring Systems</option>
+                <option>Surgical Suite Integration</option>
+                <option>ICU / Critical Care Equipment</option>
+                <option>Diagnostic Imaging</option>
+                <option>Anaesthesia Workstations</option>
+                <option>Full Hospital Deployment</option>
+              </select>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="msg" class="block text-sm font-semibold text-teal-800 mb-1.5" style="font-family:'Figtree',sans-serif;">Message</label>
+              <textarea id="msg" name="message" rows="4"
+                placeholder="Tell us about your current challenges or requirements…"
+                class="w-full rounded-lg border border-teal-200 bg-teal-50/50 px-4 py-3 text-sm text-teal-900 placeholder-teal-300 focus:bg-white focus:border-cyan-400 transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 resize-none"></textarea>
+            </div>
+
+          </div>
+
+          <div class="mt-6">
+            <button type="submit"
+              class="w-full min-h-[52px] bg-health-green hover:bg-health-green-dark text-white font-heading font-bold text-base rounded-xl transition-colors duration-200 cursor-pointer shadow-md focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2">
+              Send Message — We Respond Within 24 Hours
+            </button>
+            <p class="mt-3 text-xs text-teal-400 text-center" style="font-family:'Noto Sans',sans-serif;">
+              By submitting you agree to our <a href="#" class="underline underline-offset-1 hover:text-teal-600">Privacy Policy</a>. We never sell or share your data.
+            </p>
+          </div>
+
+        </form>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ─── CTA BANNER ────────────────────────────────────────── -->
-  <section class="gradient-hero py-16 lg:py-20" aria-labelledby="cta-heading">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in">
-      <h2 id="cta-heading" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-        Ready to Upgrade Your Hospital's Equipment?
-      </h2>
-      <p class="mt-4 text-lg text-blue-100 max-w-xl mx-auto">
-        Join 2,400+ hospitals delivering better patient outcomes with MediCore Pro. Get a custom quote and live demo within 24 hours.
-      </p>
-      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#contact"
-          class="inline-flex items-center justify-center gap-2 bg-white text-medical-700 font-bold text-base px-8 py-3.5 rounded-xl hover:bg-blue-50 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-medical-600 shadow-lg">
-          Request a Free Demo
-        </a>
-        <a href="tel:+18005550199"
-          class="inline-flex items-center justify-center gap-2 border-2 border-white/40 text-white font-semibold text-base px-8 py-3.5 rounded-xl hover:border-white hover:bg-white/10 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-medical-600">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-          1-800-555-0199
-        </a>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- ─── CONTACT FORM ──────────────────────────────────────── -->
-  <section id="contact" class="py-20 lg:py-28 bg-white" aria-labelledby="contact-heading">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-10 fade-in">
-        <h2 id="contact-heading" class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Get in Touch</h2>
-        <p class="mt-3 text-slate-500">Fill in the form and a clinical solutions specialist will contact you within one business day.</p>
-      </div>
-      <form class="bg-slate-50 rounded-2xl border border-slate-200 p-8 shadow-sm fade-in" novalidate aria-label="Contact form">
-        <div class="grid sm:grid-cols-2 gap-5">
-          <div>
-            <label for="first-name" class="block text-sm font-medium text-slate-700 mb-1.5">First Name <span aria-hidden="true" class="text-red-500">*</span></label>
-            <input id="first-name" type="text" name="first-name" autocomplete="given-name" required
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition"
-              placeholder="Jane" />
-          </div>
-          <div>
-            <label for="last-name" class="block text-sm font-medium text-slate-700 mb-1.5">Last Name <span aria-hidden="true" class="text-red-500">*</span></label>
-            <input id="last-name" type="text" name="last-name" autocomplete="family-name" required
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition"
-              placeholder="Smith" />
-          </div>
-          <div>
-            <label for="email" class="block text-sm font-medium text-slate-700 mb-1.5">Work Email <span aria-hidden="true" class="text-red-500">*</span></label>
-            <input id="email" type="email" name="email" autocomplete="email" required
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition"
-              placeholder="jane@hospital.org" />
-          </div>
-          <div>
-            <label for="phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone Number</label>
-            <input id="phone" type="tel" name="phone" autocomplete="tel"
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition"
-              placeholder="+1 (555) 000-0000" />
-          </div>
-          <div class="sm:col-span-2">
-            <label for="hospital" class="block text-sm font-medium text-slate-700 mb-1.5">Hospital / Organisation <span aria-hidden="true" class="text-red-500">*</span></label>
-            <input id="hospital" type="text" name="hospital" required
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition"
-              placeholder="City General Hospital" />
-          </div>
-          <div class="sm:col-span-2">
-            <label for="interest" class="block text-sm font-medium text-slate-700 mb-1.5">Area of Interest</label>
-            <select id="interest" name="interest"
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition bg-white cursor-pointer">
-              <option value="">Select equipment type…</option>
-              <option>Patient Monitoring Systems</option>
-              <option>Surgical Suite Integration</option>
-              <option>ICU / Critical Care Equipment</option>
-              <option>Diagnostic Imaging</option>
-              <option>Anaesthesia Workstations</option>
-              <option>Full Hospital Deployment</option>
-            </select>
-          </div>
-          <div class="sm:col-span-2">
-            <label for="message" class="block text-sm font-medium text-slate-700 mb-1.5">Message</label>
-            <textarea id="message" name="message" rows="4"
-              class="w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:border-transparent transition resize-none"
-              placeholder="Tell us about your current equipment challenges or deployment requirements…"></textarea>
-          </div>
-        </div>
-        <div class="mt-6">
-          <button type="submit"
-            class="w-full bg-medical-600 hover:bg-medical-700 text-white font-bold text-base py-3.5 rounded-xl transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2 shadow-md">
-            Send Message — We'll Respond Within 24 Hours
-          </button>
-          <p class="mt-3 text-xs text-slate-400 text-center">
-            By submitting you agree to our Privacy Policy. Your data is never sold or shared with third parties.
-          </p>
-        </div>
-      </form>
-    </div>
-  </section>
-
-  <!-- ─── FOOTER ────────────────────────────────────────────── -->
-  <footer class="bg-slate-900 text-slate-400 py-12" role="contentinfo">
+  <!-- ══════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════ -->
+  <footer class="bg-teal-900 text-teal-400 py-14" role="contentinfo">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
         <div>
-          <div class="flex items-center gap-2 mb-4">
-            <div class="w-7 h-7 bg-medical-500 rounded-md flex items-center justify-center" aria-hidden="true">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>
+          <a href="#" class="inline-flex items-center gap-2 mb-4 focus-visible:rounded" aria-label="MediCore Pro home">
+            <div class="w-8 h-8 bg-cyan-500 rounded-md flex items-center justify-center" aria-hidden="true">
+              <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <span class="font-bold text-white">MediCore<span class="text-medical-400">Pro</span></span>
-          </div>
-          <p class="text-sm leading-relaxed">Precision medical equipment for modern hospitals. FDA Cleared · CE Marked · ISO 13485.</p>
+            <span class="font-heading font-bold text-white">Medi<span class="text-cyan-400">Core</span> Pro</span>
+          </a>
+          <p class="text-sm leading-relaxed" style="font-family:'Noto Sans',sans-serif;">Precision medical equipment for modern hospitals. FDA 510(k) · CE IIa · ISO 13485.</p>
         </div>
-        <nav aria-label="Products">
-          <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Products</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#features" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Patient Monitors</a></li>
-            <li><a href="#features" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Surgical Systems</a></li>
-            <li><a href="#features" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">ICU Equipment</a></li>
-            <li><a href="#features" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Diagnostic Imaging</a></li>
+
+        <nav aria-labelledby="footer-products">
+          <h3 id="footer-products" class="font-heading text-xs font-bold text-white uppercase tracking-widest mb-4">Products</h3>
+          <ul class="space-y-2.5 text-sm" style="font-family:'Noto Sans',sans-serif;">
+            <li><a href="#solutions" class="hover:text-white transition-colors duration-200">Patient Monitors</a></li>
+            <li><a href="#solutions" class="hover:text-white transition-colors duration-200">Surgical Systems</a></li>
+            <li><a href="#solutions" class="hover:text-white transition-colors duration-200">ICU Equipment</a></li>
+            <li><a href="#solutions" class="hover:text-white transition-colors duration-200">Diagnostic Imaging</a></li>
           </ul>
         </nav>
-        <nav aria-label="Company">
-          <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">About Us</a></li>
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Clinical Research</a></li>
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Careers</a></li>
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Press</a></li>
+
+        <nav aria-labelledby="footer-company">
+          <h3 id="footer-company" class="font-heading text-xs font-bold text-white uppercase tracking-widest mb-4">Company</h3>
+          <ul class="space-y-2.5 text-sm" style="font-family:'Noto Sans',sans-serif;">
+            <li><a href="#" class="hover:text-white transition-colors duration-200">About Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Clinical Research</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Regulatory Affairs</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Careers</a></li>
           </ul>
         </nav>
-        <nav aria-label="Support">
-          <h3 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Support</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#contact" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Contact Us</a></li>
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Documentation</a></li>
-            <li><a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Compliance Docs</a></li>
-            <li><a href="tel:+18005550199" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">1-800-555-0199</a></li>
+
+        <nav aria-labelledby="footer-support">
+          <h3 id="footer-support" class="font-heading text-xs font-bold text-white uppercase tracking-widest mb-4">Support</h3>
+          <ul class="space-y-2.5 text-sm" style="font-family:'Noto Sans',sans-serif;">
+            <li><a href="#contact" class="hover:text-white transition-colors duration-200">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Documentation</a></li>
+            <li><a href="#" class="hover:text-white transition-colors duration-200">Compliance Docs</a></li>
+            <li><a href="tel:+18005550199" class="hover:text-white transition-colors duration-200">1-800-555-0199</a></li>
           </ul>
         </nav>
+
       </div>
-      <div class="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs">
+
+      <div class="border-t border-teal-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs" style="font-family:'Noto Sans',sans-serif;">
         <p>&copy; 2026 MediCore Pro Inc. All rights reserved.</p>
-        <div class="flex gap-4">
-          <a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Privacy Policy</a>
-          <a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Terms of Service</a>
-          <a href="#" class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-medical-500 rounded">Regulatory</a>
-        </div>
+        <nav aria-label="Legal links" class="flex gap-5">
+          <a href="#" class="hover:text-white transition-colors duration-200">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors duration-200">Terms of Service</a>
+          <a href="#" class="hover:text-white transition-colors duration-200">Regulatory</a>
+        </nav>
       </div>
     </div>
   </footer>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 
 </body>
