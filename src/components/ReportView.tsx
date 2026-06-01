@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
-  PieChart, Pie, Legend,
-} from 'recharts';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Title } from 'chart.js';
+import { Bar, Pie } from 'react-chartjs-2';
 import { FileText, DollarSign, AlertTriangle, Calendar, Printer } from 'lucide-react';
 import type { Equipment, ReplacementPriority } from '../types/equipment';
 import { calculateScore, getPriorityBgClass } from '../utils/scoringEngine';
 import { PRIORITY_LABELS, CATEGORY_LABELS } from '../types/equipment';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Title);
 
 const PRIORITY_ORDER: ReplacementPriority[] = ['immediate', 'plan', 'monitor', 'continue'];
 const PRIORITY_COLORS: Record<ReplacementPriority, string> = {
@@ -126,19 +126,43 @@ export function ReportView({ equipment, onViewDetail }: ReportViewProps) {
             <DollarSign size={16} className="text-blue-500" />
             4-Year Capital Budget Projection ($000s)
           </h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={budgetChartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="year" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip formatter={(val) => [`$${(val as number)}K`, 'Budget']} />
-              <Bar dataKey="cost" radius={[4, 4, 0, 0]} fill="#3b82f6">
-                {budgetChartData.map((entry, i) => (
-                  <Cell key={i} fill={i === 0 ? '#ef4444' : i === 1 ? '#f97316' : '#3b82f6'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <div style={{ position: 'relative', height: '200px' }}>
+            <Bar
+              data={{
+                labels: budgetChartData.map(d => d.year),
+                datasets: [{
+                  label: 'Budget ($000s)',
+                  data: budgetChartData.map(d => d.cost),
+                  backgroundColor: budgetChartData.map((_, i) => i === 0 ? '#ef4444' : i === 1 ? '#f97316' : '#3b82f6'),
+                  borderRadius: 4,
+                  borderSkipped: false,
+                }]
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => `$${context.parsed.y}K`,
+                    },
+                  },
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: { font: { size: 11 } },
+                    grid: { color: '#f1f5f9' },
+                  },
+                  x: {
+                    ticks: { font: { size: 12 } },
+                    grid: { display: false },
+                  },
+                },
+              }}
+            />
+          </div>
           <div className="flex gap-4 mt-2 text-xs text-slate-500 justify-center">
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-red-500 inline-block" /> {currentYear} Emergency</span>
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-orange-500 inline-block" /> {currentYear + 1} Planned</span>
@@ -148,16 +172,33 @@ export function ReportView({ equipment, onViewDetail }: ReportViewProps) {
 
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
           <h3 className="font-semibold text-slate-700 mb-4">Fleet Priority Distribution</h3>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie data={priorityPieData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`} fontSize={11}>
-                {priorityPieData.map((entry) => (
-                  <Cell key={entry.name} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+          <div style={{ position: 'relative', height: '200px' }}>
+            <Pie
+              data={{
+                labels: priorityPieData.map(d => d.name),
+                datasets: [{
+                  data: priorityPieData.map(d => d.value),
+                  backgroundColor: priorityPieData.map(d => d.color),
+                }]
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: 'bottom' as const },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => {
+                        const label = context.label || '';
+                        const value = context.parsed || 0;
+                        return `${label}: ${value}`;
+                      },
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
 

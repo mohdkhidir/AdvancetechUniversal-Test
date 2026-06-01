@@ -1,10 +1,13 @@
 import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip as ChartTooltip, Title } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import { Cpu, AlertTriangle, CheckCircle, Package } from 'lucide-react';
 import type { Equipment, EquipmentCategory } from '../types/equipment';
 import { calculateScore } from '../utils/scoringEngine';
 import { CATEGORY_LABELS, PARTS_LABELS } from '../types/equipment';
 import { BENCHMARKS } from '../data/benchmarks';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, ChartTooltip, Title);
 
 interface TechGapAnalysisProps {
   equipment: Equipment[];
@@ -104,19 +107,49 @@ export function TechGapAnalysis({ equipment, onViewDetail }: TechGapAnalysisProp
         {/* Category Gap Chart */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
           <h3 className="font-semibold text-slate-700 mb-4">Average Technology Gap by Category</h3>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={categoryGapData} margin={{ left: 0, right: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-              <YAxis domain={[0, 5]} tick={{ fontSize: 11 }} label={{ value: 'Avg Gen Gap', angle: -90, position: 'insideLeft', style: { fontSize: 10 } }} />
-              <Tooltip formatter={(val) => [`${val} generations`, 'Avg Gap']} />
-              <Bar dataKey="avgGap" radius={[4, 4, 0, 0]}>
-                {categoryGapData.map((entry) => (
-                  <Cell key={entry.name} fill={getGapColor(Math.round(entry.avgGap))} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <div style={{ position: 'relative', height: '220px' }}>
+            <Bar
+              data={{
+                labels: categoryGapData.map(d => d.name),
+                datasets: [{
+                  label: 'Avg Gen Gap',
+                  data: categoryGapData.map(d => d.avgGap),
+                  backgroundColor: categoryGapData.map(d => getGapColor(Math.round(d.avgGap))),
+                  borderRadius: 4,
+                  borderSkipped: false,
+                }]
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => `${context.parsed.y} generations`,
+                    },
+                  },
+                },
+                scales: {
+                  y: {
+                    min: 0,
+                    max: 5,
+                    ticks: { font: { size: 11 } },
+                    grid: { color: '#f1f5f9' },
+                    title: {
+                      display: true,
+                      text: 'Avg Gen Gap',
+                      font: { size: 10 },
+                    },
+                  },
+                  x: {
+                    ticks: { font: { size: 11 } },
+                    grid: { display: false },
+                  },
+                },
+              }}
+            />
+          </div>
         </div>
 
         {/* Parts Availability + Software Support */}

@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import {
-  PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar,
-} from 'recharts';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, RadialLinearScale, ArcElement, Tooltip as ChartTooltip } from 'chart.js';
+import { Doughnut, Bar, Radar } from 'react-chartjs-2';
 import { AlertTriangle, Clock, Eye, CheckCircle, DollarSign, Wrench, TrendingUp } from 'lucide-react';
 import type { Equipment, ReplacementPriority } from '../types/equipment';
 import { calculateScore, getPriorityBgClass } from '../utils/scoringEngine';
 import { PRIORITY_LABELS, CATEGORY_LABELS } from '../types/equipment';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, RadialLinearScale, ArcElement, ChartTooltip);
 
 interface DashboardProps {
   equipment: Equipment[];
