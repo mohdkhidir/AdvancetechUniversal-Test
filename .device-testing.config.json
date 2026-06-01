@@ -1,0 +1,189 @@
+{
+  "devices": {
+    "android": [
+      {
+        "name": "Samsung Galaxy S24 Ultra",
+        "model": "SM-S928B",
+        "osVersion": "14.x",
+        "screenSize": "6.8 inches",
+        "resolution": "1440x3120",
+        "dpi": 501,
+        "ram": "12GB"
+      },
+      {
+        "name": "Samsung Galaxy A15",
+        "model": "SM-A155F",
+        "osVersion": "14.x",
+        "screenSize": "6.5 inches",
+        "resolution": "1080x2340",
+        "dpi": 269,
+        "ram": "4GB",
+        "note": "Lower-end device for network/performance testing"
+      },
+      {
+        "name": "Google Pixel 8",
+        "model": "huricaneSER",
+        "osVersion": "14.x",
+        "screenSize": "6.2 inches",
+        "resolution": "1440x2992",
+        "dpi": 486,
+        "ram": "8GB"
+      }
+    ],
+    "ios": [
+      {
+        "name": "iPhone 15 Pro Max",
+        "model": "A2846",
+        "osVersion": "17.x",
+        "screenSize": "6.7 inches",
+        "resolution": "1440x3200",
+        "dpi": 460,
+        "ram": "8GB"
+      },
+      {
+        "name": "iPhone 13 mini",
+        "model": "A2626",
+        "osVersion": "17.x",
+        "screenSize": "5.4 inches",
+        "resolution": "1080x2340",
+        "dpi": 476,
+        "ram": "4GB",
+        "note": "Smaller device for responsive design testing"
+      },
+      {
+        "name": "iPad Air (6th generation)",
+        "model": "A2847",
+        "osVersion": "17.x",
+        "screenSize": "11 inches",
+        "resolution": "2360x1640",
+        "dpi": 264,
+        "ram": "8GB",
+        "note": "Tablet for landscape testing"
+      }
+    ]
+  },
+  "testingScenarios": [
+    {
+      "name": "Slow 3G Network",
+      "downlink": "0.4 Mbps",
+      "uplink": "0.05 Mbps",
+      "latency": "400ms",
+      "packetLoss": "5%",
+      "purpose": "Test app functionality with poor network conditions"
+    },
+    {
+      "name": "4G LTE",
+      "downlink": "5 Mbps",
+      "uplink": "1 Mbps",
+      "latency": "50ms",
+      "packetLoss": "0.1%",
+      "purpose": "Test typical mobile network performance"
+    },
+    {
+      "name": "Offline Mode",
+      "downlink": "0 Mbps",
+      "uplink": "0 Mbps",
+      "latency": "N/A",
+      "packetLoss": "100%",
+      "purpose": "Test offline-first functionality and sync queue"
+    }
+  ],
+  "performanceMetrics": {
+    "targets": {
+      "fcp": "2.5s",
+      "lcp": "4s",
+      "cls": "0.1",
+      "ttfb": "0.6s"
+    },
+    "bundleSize": {
+      "maxMainBundle": "180KB",
+      "maxTotalGzipped": "350KB",
+      "note": "Optimized for mobile networks and devices"
+    }
+  },
+  "testingCheckList": [
+    {
+      "category": "Functional Testing",
+      "items": [
+        "Add new equipment on mobile device",
+        "Edit equipment details with on-screen keyboard",
+        "View dashboard with touch scrolling",
+        "Navigate between all views without lag",
+        "Test all buttons and interactive elements for proper sizing (min 44x44dp)"
+      ]
+    },
+    {
+      "category": "Offline Testing",
+      "items": [
+        "Add equipment while offline",
+        "View cached equipment list while offline",
+        "Sync changes when connection restored",
+        "Handle sync conflicts properly",
+        "Test IndexedDB persistence across app reloads"
+      ]
+    },
+    {
+      "category": "Performance Testing",
+      "items": [
+        "Measure initial load time on low-end device",
+        "Monitor memory usage with large equipment lists",
+        "Test lazy loading of report components",
+        "Verify image caching strategies",
+        "Check battery impact during idle state"
+      ]
+    },
+    {
+      "category": "UI/UX Testing",
+      "items": [
+        "Test responsive layout on various screen sizes",
+        "Verify touch targets are adequately sized",
+        "Test keyboard navigation and accessibility",
+        "Verify landscape orientation support",
+        "Test app on devices with notches/safe areas"
+      ]
+    },
+    {
+      "category": "Network Testing",
+      "items": [
+        "Test on slow 3G network",
+        "Test on 4G LTE network",
+        "Test with intermittent connectivity",
+        "Verify network error handling",
+        "Test sync queue with poor connectivity"
+      ]
+    }
+  ],
+  "browserDevTools": {
+    "chrome": {
+      "emulation": "DevTools > Device Toolbar",
+      "networkThrottling": "DevTools > Network tab > Throttling",
+      "performance": "DevTools > Performance tab",
+      "lighthouse": "DevTools > Lighthouse tab"
+    },
+    "safari": {
+      "responsiveDesign": "Develop > Enter Responsive Design Mode",
+      "deviceSimulation": "Develop > Simulator",
+      "performance": "Develop > Show Web Inspector > Performance"
+    }
+  },
+  "appStoreRequirements": {
+    "android": {
+      "minSdk": 24,
+      "targetSdk": 34,
+      "requiredPermissions": ["INTERNET", "ACCESS_NETWORK_STATE"],
+      "features": {
+        "touchscreen": "required",
+        "camera": "optional"
+      },
+      "ageRating": "General Audiences"
+    },
+    "ios": {
+      "minDeploymentTarget": "13.0",
+      "requiredCapabilities": ["armv7", "arm64"],
+      "requirements": ["minimum iPhone or iPad with iOS 13.0 or later"],
+      "ageRating": "4+",
+      "iphoneOnly": false,
+      "supportsIPad": true
+    }
+  }
+}
